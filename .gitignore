@@ -2,6 +2,8 @@
 logs/
 skyfield/
 
+# MacOS
 .DS_Store
 
+# Settings
 settings.yaml
