@@ -1,3 +1,7 @@
+# Folders
+logs/
+skyfield/
+
 .DS_Store
 
 settings.yaml
