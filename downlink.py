@@ -33,19 +33,20 @@ with open('settings.yaml', 'r') as file:
     except yaml.YAMLError as e:
         logger.error(e)
 
-logger.info('Position set to:')
-logger.info(f'Latitude: {settings["latitude"]}')
-logger.info(f'Longitude: {settings["longitude"]}')
-logger.info(f'Elevation: {settings["elevation_m"]}')
 # Timezone
 tz = timezone(settings['timezone'])
 
 
 station = Topos(
-    latitude=settings['latitude'],
-    longitude=settings['longitude'],
-    elevation_m=settings['elevation_m']
+    latitude=settings['station']['latitude'],
+    longitude=settings['station']['longitude'],
+    elevation_m=settings['station']['elevation_m']
 )
+
+logger.info('Position set to:')
+logger.info(f'Latitude: {settings["station"]["latitude"]}')
+logger.info(f'Longitude: {settings["station"]["longitude"]}')
+logger.info(f'Elevation: {settings["station"]["elevation_m"]}')
 
 load = Loader(
     'skyfield/',
