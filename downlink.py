@@ -3,6 +3,7 @@ import yaml
 import subprocess as sp
 
 from datetime import datetime, timedelta, timezone
+from pytz import timezone
 from skyfield.api import Topos, Loader
 
 logger = logging.getLogger(__name__)
@@ -23,6 +24,9 @@ fh.setLevel(logging.DEBUG)
 fh.setFormatter(formatter)
 logger.addHandler(fh)
 
+
+# Timezone
+tz = timezone('Europe/Rome')
 
 with open('settings.yaml', 'r') as file:
     try:
@@ -57,8 +61,8 @@ logger.info(satellite)
 
 t, events = satellite.find_events(
     station,
-    ts.utc(datetime.now(timezone.utc)),
-    ts.utc(datetime.now(timezone.utc) + timedelta(days=1)),
+    ts.utc(datetime.now(tz)),
+    ts.utc(datetime.now(tz) + timedelta(days=1)),
     altitude_degrees=15
 )
 
