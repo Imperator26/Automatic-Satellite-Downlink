@@ -1,6 +1,5 @@
 import logging
 import yaml
-import asyncio
 import subprocess as sp
 
 from datetime import datetime, timedelta, timezone
