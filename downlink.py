@@ -6,6 +6,8 @@ from datetime import datetime, timedelta, timezone
 from pytz import timezone
 from skyfield.api import Topos, Loader
 
+
+# Logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
