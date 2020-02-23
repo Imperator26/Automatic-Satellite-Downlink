@@ -27,9 +27,6 @@ fh.setFormatter(formatter)
 logger.addHandler(fh)
 
 
-# Timezone
-tz = timezone('Europe/Rome')
-
 with open('settings.yaml', 'r') as file:
     try:
         settings = yaml.safe_load(file)
@@ -40,6 +37,8 @@ logger.info('Position set to:')
 logger.info(f'Latitude: {settings["latitude"]}')
 logger.info(f'Longitude: {settings["longitude"]}')
 logger.info(f'Elevation: {settings["elevation_m"]}')
+# Timezone
+tz = timezone(settings['timezone'])
 
 
 station = Topos(
