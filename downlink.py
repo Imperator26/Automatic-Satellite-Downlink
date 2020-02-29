@@ -1,7 +1,7 @@
 import logging
 import subprocess as sp
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pytz import timezone
 from skyfield.api import Topos, Loader
 
