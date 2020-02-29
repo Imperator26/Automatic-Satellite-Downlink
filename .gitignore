@@ -11,3 +11,6 @@ skyfield/
 settings.yaml
 
 weather.txt
+
+# Python
+__pycache__
