@@ -1,11 +1,11 @@
 import logging
-import yaml
 import subprocess as sp
 
 from datetime import datetime, timedelta, timezone
 from pytz import timezone
 from skyfield.api import Topos, Loader
 
+from utils.load_settings import load_settings
 
 # Logging
 logger = logging.getLogger(__name__)
@@ -26,12 +26,6 @@ fh.setLevel(logging.DEBUG)
 fh.setFormatter(formatter)
 logger.addHandler(fh)
 
-
-with open('settings.yaml', 'r') as file:
-    try:
-        settings = yaml.safe_load(file)
-    except yaml.YAMLError as e:
-        logger.error(e)
 
 # Timezone
 tz = timezone(settings['timezone'])
@@ -70,3 +64,6 @@ t, events = satellite.find_events(
 
 logger.info(t)
 logger.info(events)
+if __name__ == '__main__':
+    # Load settings
+    settings = load_settings()
