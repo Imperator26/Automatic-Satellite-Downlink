@@ -1,4 +1,5 @@
 import logging
+import threading
 import subprocess as sp
 
 from datetime import datetime, timedelta
@@ -27,43 +28,58 @@ fh.setFormatter(formatter)
 logger.addHandler(fh)
 
 
-# Timezone
-tz = timezone(settings['timezone'])
+def scheduler(satellite):
+    return
 
 
-station = Topos(
-    latitude=settings['station']['latitude'],
-    longitude=settings['station']['longitude'],
-    elevation_m=settings['station']['elevation_m']
-)
 
-logger.info('Position set to:')
-logger.info(f'Latitude: {settings["station"]["latitude"]}')
-logger.info(f'Longitude: {settings["station"]["longitude"]}')
-logger.info(f'Elevation: {settings["station"]["elevation_m"]}')
 
-load = Loader(
-    'skyfield/',
-    verbose=True,
-    expire=True
-)
-ts = load.timescale()
-
-satellites = load.tle('http://celestrak.com/NORAD/elements/weather.txt')
-logger.info('TLEs loaded.')
-
-satellite = satellites['NOAA 19']
-logger.info(satellite)
-
-t, events = satellite.find_events(
-    station,
-    ts.utc(datetime.now(tz)),
-    ts.utc(datetime.now(tz) + timedelta(days=1)),
-    altitude_degrees=15
-)
-
-logger.info(t)
-logger.info(events)
 if __name__ == '__main__':
     # Load settings
     settings = load_settings()
+
+    # Timezone
+    tz = timezone(settings['timezone'])
+
+    # Station
+    station = Topos(
+        latitude=settings['station']['latitude'],
+        longitude=settings['station']['longitude'],
+        elevation_m=settings['station']['elevation_m']
+    )
+
+    logger.info('Position set to:')
+    logger.info(f'Latitude: {settings["station"]["latitude"]}')
+    logger.info(f'Longitude: {settings["station"]["longitude"]}')
+    logger.info(f'Elevation: {settings["station"]["elevation_m"]}')
+
+    # Load skyfield
+    load = Loader(
+        'skyfield/',
+        verbose=True,
+        expire=True
+    )
+    ts = load.timescale()
+
+    satellites = load.tle('http://celestrak.com/NORAD/elements/weather.txt')
+    logger.info('TLEs loaded.')
+
+    # Create threads
+    threads = dict()
+
+    for satellite in settings['satellites']:
+        logger.info(f'Creating thread for {satellite}')
+        x = threading.Thread(target=scheduler, args=(satellite,), daemon=True)
+        threads[satellite] = x
+        x.start()
+
+    try:
+        while True:
+            continue
+    except KeyboardInterrupt:
+        logging.info('Killing threads...')
+
+        for satellite, thread in threads.items():
+            logging.info(f'Killing {satellite} thread')
+            thread.join()
+        pass
