@@ -3,6 +3,7 @@ logs/
 recordings/
 images/
 skyfield/
+venv/
 
 # MacOS
 .DS_Store
