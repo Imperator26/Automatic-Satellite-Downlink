@@ -32,6 +32,44 @@ def scheduler(satellite):
     return
 
 
+def schedule_recording(satellite):
+    satellite = satellites[satellite]
+    logger.info(satellite)
+
+    t, events = satellite.find_events(
+        station,
+        ts.utc(datetime.now(tz)),
+        ts.utc(datetime.now(tz) + timedelta(days=1)),
+        altitude_degrees=15
+    )
+    for t, e in zip(t, events):
+        if e == 0:
+            logger.info(t.astimezone(tz))
+            logger.info(t.astimezone(tz) < datetime.now(tz))
+            if t.astimezone(tz) > datetime.now(tz):
+                pass
+                #decode_apt(record_pass(satellite, frequency, sample_rate))
+
+
+def record_pass(satellite, frequency, sample_rate):
+    filename = f'{satellite.name}-{datetime.now(tz).strftime("%Y-%m-%d %H:%M")}'
+    sp.run([
+        'timeout',
+        '',
+        'rtl_fm',
+        '-f', frequency,
+        '-s', sample_rate,
+        f'recordings/{filename}.wav'
+    ])
+    return filename
+
+
+def decode_apt(filename):
+    sp.run([
+        'noaa-apt',
+        f'recordings/{filename}.wav',
+        '-o', f'images/{filename}.png'
+    ])
 
 
 if __name__ == '__main__':
