@@ -1,0 +1,11 @@
+NOAA 15:
+  frequency: 137.620M
+  sample_rate: 120k
+
+NOAA 18:
+  frequency: 137.9125M
+  sample_rate: 120k
+
+NOAA 19:
+  frequency: 137.100M
+  sample_rate: 120k
